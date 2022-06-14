@@ -77,3 +77,62 @@ def sign_up(request):
         form = RegisterForm()
 
     return render(request, 'registration/sign_up.html', {"form": form})
+
+@login_required(login_url="/login")
+def posts(request):
+    posts = Post.objects.all()
+
+    if request.method == "POST":
+        post_id = request.POST.get("post-id")
+        user_id = request.POST.get("user-id")
+
+        if post_id:
+            post = Post.objects.filter(id=post_id).first()
+            if post and (post.author == request.user or request.user.has_perm("main.delete_post")):
+                post.delete()
+        elif user_id:
+            user = User.objects.filter(id=user_id).first()
+            if user and request.user.is_staff:
+                try:
+                    group = Group.objects.get(name='default')
+                    group.user_set.remove(user)
+                except:
+                    pass
+
+                try:
+                    group = Group.objects.get(name='mod')
+                    group.user_set.remove(user)
+                except:
+                    pass
+
+    return render(request, 'main/posts.html', {"posts": posts})
+
+
+@login_required(login_url="/login")
+def achievements(request):
+    achievements = Achievement.objects.all()
+
+    if request.method == "POST":
+        achievements = request.POST.get("achievement-id")
+        user_id = request.POST.get("user-id")
+
+        if achievements:
+            achievement = Achievement.objects.filter(id=post_id).first()
+            if achievement and (achievement.author == request.user or request.user.has_perm("main.delete_achievement")):
+                achievement.delete()
+        elif user_id:
+            user = User.objects.filter(id=user_id).first()
+            if user and request.user.is_staff:
+                try:
+                    group = Group.objects.get(name='default')
+                    group.user_set.remove(user)
+                except:
+                    pass
+
+                try:
+                    group = Group.objects.get(name='branch')
+                    group.user_set.remove(user)
+                except:
+                    pass
+
+    return render(request, 'main/achievements.html', {"achievements": achievements})
