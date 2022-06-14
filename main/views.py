@@ -71,6 +71,8 @@ def sign_up(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
+            group = Group.objects.get(name='default')
+            user.groups.add(group)
             login(request, user)
             return redirect('/home')
     else:
