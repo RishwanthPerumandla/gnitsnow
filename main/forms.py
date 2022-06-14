@@ -3,19 +3,16 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Post, Achievement
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    firstname = forms.CharField()
-    lastname = forms.CharField()
-    year = forms.CharField()
-    branch = forms.CharField()
-    section = forms.CharField()
-    
+    dob = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}),required=False)
 
     class Meta:
         model = User
-        fields = ["username", "email", "password1", "password2", "firstname", "lastname", "year", "branch", "section"]
+        fields = ["username", "dob","email", "password1", "password2"]
 
 
 class PostForm(forms.ModelForm):
