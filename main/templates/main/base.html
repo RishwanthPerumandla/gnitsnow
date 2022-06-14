@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gnits Now{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <div>
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="/home">Home</a>
+              </li>
+              {% if user.is_authenticated and perms.main.view_post %}
+              <li class="nav-item">
+                <a class="nav-link" href="/posts">Clubs</a>
+              </li>
+              {% endif %}
+              {% if user.is_authenticated and perms.main.view_achievement %}
+              <li class="nav-item">
+                <a class="nav-link" href="/achievements">Achievements</a>
+              </li>
+              {% endif %}
+
+              {% if user.is_authenticated and perms.main.add_post %}
+              <li class="nav-item">
+                <a class="nav-link" href="/create-post">Create Post</a>
+              </li>
+              {% endif %}
+              {% if user.is_authenticated and perms.main.add_achievement %}
+              <li class="nav-item">
+                <a class="nav-link" href="/create-achievement">Create Achievement</a>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+          <div>
+            <ul class="navbar-nav">
+              {% if user.is_authenticated %}
+              <span class="navbar-text">Logged in as {{user.username}} | </span>
+              <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="container">{% block content %} {% endblock %}</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" ></script>
+</body>
+</html>
